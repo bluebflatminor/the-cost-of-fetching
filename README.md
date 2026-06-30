@@ -5,9 +5,10 @@ A one-screen explainer, built so a teenager gets it in ten seconds:
 
 Open `index.html` (or visit the Pages link). Five everyday computer jobs are drawn at
 the *same* scale. By default the four arithmetic/cache jobs are near-invisible slivers
-beside a wall of DRAM — that gap is the whole point. A toggle lets you "zoom in on the
-cheap ones" (a log scale), and the toggle teaches its own lesson: you have to *distort*
-the chart to see them, because in true proportion they really are that small.
+beside a wall of DRAM — that gap is the whole point. A scale slider lets you drag from
+true proportion toward a squished (log) scale, and the movement teaches its own lesson:
+the cheap jobs *swell up out of nothing* as you drag — you're not discovering them, you're
+distorting the chart until they show.
 
 ## Why it matters
 
