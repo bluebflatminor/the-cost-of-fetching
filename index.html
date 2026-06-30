@@ -10,13 +10,13 @@
     color-scheme: light dark;
     --paper:#f0e9d8; --ink:#2c2519; --muted:#8a7d63; --line:#d8cdb2; --card:#fbf6ea;
     --cheap:#5f8f6e; --mid:#c9a24a; --dear:#b6442f; --cheapT:#4a7a59; --midT:#977520; --dearT:#b6442f;
-    --onBar:#fbf6ea;
+    --accent:#b6442f;
   }
   @media (prefers-color-scheme: dark){
     :root{
       --paper:#15130e; --ink:#ece4d3; --muted:#a2967b; --line:#352f25; --card:#211d16;
       --cheap:#79b48c; --mid:#e0bd66; --dear:#e0674e; --cheapT:#8ec79f; --midT:#e7c878; --dearT:#ef7d63;
-      --onBar:#15130e;
+      --accent:#e0674e;
     }
   }
   *{box-sizing:border-box}
@@ -26,84 +26,93 @@
   .wrap{max-width:760px;margin:0 auto;padding:26px 18px 50px}
   h1{font-size:25px;line-height:1.2;margin:0 0 6px;font-weight:700}
   .lede{font-size:15px;color:var(--muted);margin:0 0 22px}
-  .toggle{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-bottom:8px}
-  .toggle button{border:none;background:transparent;color:var(--muted);font:600 12px/1 inherit;padding:9px 13px;cursor:pointer}
-  .toggle button.on{background:var(--ink);color:var(--paper)}
-  .hint{font-size:12px;color:var(--muted);min-height:18px;margin:2px 0 16px}
+  .scalectl{margin:0 0 6px}
+  .scalelabels{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .scalelabels #scaleState{color:var(--accent);font-weight:700;text-transform:none;letter-spacing:0}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;
+    background:var(--line);outline:none;margin:4px 0}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--card);border:3px solid var(--accent);cursor:grab}
+  input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--card);border:3px solid var(--accent);cursor:grab}
+  .hint{font-size:12px;color:var(--muted);min-height:34px;margin:4px 0 18px}
   .row{margin:0 0 16px}
   .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:5px}
   .name{font-size:14px;font-weight:600}
   .tag{font-size:13px;font-weight:700;white-space:nowrap}
   .track{position:relative;height:30px;background:var(--card);border:1px solid var(--line);border-radius:7px;overflow:hidden}
-  .bar{position:absolute;left:0;top:0;bottom:0;border-radius:6px 0 0 6px;transition:width .5s cubic-bezier(.2,.7,.2,1);min-width:3px}
+  .bar{position:absolute;left:0;top:0;bottom:0;border-radius:6px 0 0 6px;min-width:3px}
   .pj{font-size:11px;color:var(--muted);margin-top:3px}
   .cheap .bar{background:var(--cheap)} .cheap .tag{color:var(--cheapT)}
   .mid .bar{background:var(--mid)} .mid .tag{color:var(--midT)}
   .dear .bar{background:var(--dear)} .dear .tag{color:var(--dearT)}
-  .takeaway{margin-top:26px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--dear);border-radius:9px;padding:16px 18px}
+  .takeaway{margin-top:26px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:9px;padding:16px 18px}
   .takeaway b{color:var(--dearT)}
   .takeaway p{margin:0 0 10px;font-size:15px}.takeaway p:last-child{margin:0}
   .src{margin-top:18px;font-size:11px;color:var(--muted)}
-  :focus-visible{outline:2px solid var(--dear);outline-offset:2px}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Doing the math is nearly free.<br>Going to <em>get</em> the numbers is what costs.</h1>
-  <p class="lede">How much energy a computer spends on five everyday jobs. Same scale for all of them.</p>
+  <p class="lede">How much energy a computer spends on five everyday jobs — all drawn at the same scale.</p>
 
-  <div class="toggle" role="group" aria-label="scale">
-    <button id="btnTrue" class="on">True scale</button>
-    <button id="btnLog">Zoom in on the cheap ones</button>
+  <div class="scalectl">
+    <div class="scalelabels"><span>True proportion</span><span id="scaleState">&larr; drag the scale &rarr;</span><span>Squished</span></div>
+    <input type="range" id="scale" min="0" max="1000" value="0" aria-label="Scale, from true proportion to squished">
   </div>
   <div class="hint" id="hint"></div>
 
   <div id="chart"></div>
 
   <div class="takeaway">
-    <p>Notice you had to <b>squish the chart</b> just to see the cheap jobs. That squish is the whole story.</p>
+    <p>Drag the scale and the four cheap jobs <b>swell up out of nothing</b>. You're not discovering them &mdash; you're distorting the chart until they show. That distortion is the whole story.</p>
     <p>Adding and multiplying numbers costs almost nothing. Nearly all the energy goes into <b>fetching a number from far away</b> and carrying it to where the math happens.</p>
-    <p>Put it as a walk: if adding two numbers is <b>one footstep</b>, then grabbing one number from the computer's main memory is walking about <b>700 steps</b> — half a kilometre — to fetch it, every time.</p>
-    <p>That trip — not the thinking — is why computers, and especially AI, burn so much power.</p>
+    <p>Put it as a walk: if adding two numbers is <b>one footstep</b>, then grabbing one number from the computer's main memory is walking about <b>700 steps</b> &mdash; half a kilometre &mdash; to fetch it, every time.</p>
+    <p>That trip &mdash; not the thinking &mdash; is why computers, and especially AI, burn so much power.</p>
   </div>
 
-  <p class="src">Energy per operation, 45&nbsp;nm chips — the standard reference figures from Horowitz (ISSCC 2014) and Dally. The money tag is an anchor for intuition (one decimal add ≈ 1¢), not a literal price.</p>
+  <p class="src">Energy per operation, 45&nbsp;nm chips &mdash; the standard reference figures from Horowitz (ISSCC 2014) and Dally. The money tag is an anchor for intuition (one decimal add &approx; 1&cent;), not a literal price.</p>
 </div>
 
 <script>
 "use strict";
 const DATA=[
   {name:"Add two whole numbers",      pj:0.03, money:"basically free", cls:"cheap"},
-  {name:"Add two decimals",           pj:0.9,  money:"≈ 1¢",  cls:"cheap"},
-  {name:"Multiply two decimals",      pj:3.7,  money:"≈ 4¢",  cls:"mid"},
-  {name:"Grab a number from nearby memory (cache)", pj:5, money:"≈ 6¢", cls:"mid"},
-  {name:"Fetch a number from main memory (DRAM)",   pj:640, money:"≈ $7", cls:"dear"},
+  {name:"Add two decimals",           pj:0.9,  money:"\u2248 1\u00a2",  cls:"cheap"},
+  {name:"Multiply two decimals",      pj:3.7,  money:"\u2248 4\u00a2",  cls:"mid"},
+  {name:"Grab a number from nearby memory (cache)", pj:5, money:"\u2248 6\u00a2", cls:"mid"},
+  {name:"Fetch a number from main memory (DRAM)",   pj:640, money:"\u2248 $7", cls:"dear"},
 ];
 const MAX=640, MIN=0.03;
-let mode="true";
+let t=0; // 0 = true proportion, 1 = full log (squished)
 const chart=document.getElementById('chart');
 DATA.forEach((d,i)=>{
   const row=document.createElement('div');row.className="row "+d.cls;
-  row.innerHTML=`<div class="top"><span class="name">${d.name}</span><span class="tag">${d.money}</span></div>
-    <div class="track"><div class="bar" id="bar${i}"></div></div>
-    <div class="pj">${d.pj} pJ ${d.pj===640?'(picojoules — that bar is ~700× the decimal-add bar)':'(picojoules)'}</div>`;
+  row.innerHTML='<div class="top"><span class="name">'+d.name+'</span><span class="tag">'+d.money+'</span></div>'+
+    '<div class="track"><div class="bar" id="bar'+i+'"></div></div>'+
+    '<div class="pj">'+d.pj+' pJ '+(d.pj===640?'(picojoules \u2014 that bar is ~700\u00d7 the decimal-add bar)':'(picojoules)')+'</div>';
   chart.appendChild(row);
 });
 function widthPct(pj){
-  if(mode==="true") return Math.max(pj/MAX*100, 0.4);
+  const lin=pj/MAX;
   const lo=Math.log10(MIN), hi=Math.log10(MAX);
-  return Math.max((Math.log10(pj)-lo)/(hi-lo)*100, 2.5);
+  const lg=(Math.log10(pj)-lo)/(hi-lo);
+  const w=(1-t)*lin + t*lg;
+  return Math.max(w*100, t>0.02?1.2:0.35);
+}
+function hintFor(){
+  if(t<0.04) return "True proportion. The first four bars are real \u2014 they're just that tiny next to a memory fetch.";
+  if(t<0.55) return "You're squishing the scale to coax the cheap jobs into view. Watch them grow \u2014 nothing changed but the ruler.";
+  return "Fully squished (a log scale). Now every job is visible \u2014 but the bars no longer tell the truth about how big the gap really is.";
 }
 function render(){
   DATA.forEach((d,i)=>{document.getElementById('bar'+i).style.width=widthPct(d.pj).toFixed(2)+'%';});
-  document.getElementById('hint').textContent = mode==="true"
-    ? "The first four bars are nearly invisible — that's the point. They're real, just tiny next to the fetch."
-    : "Now the cheap jobs are visible — but only because the scale is squished. In real proportion they're slivers.";
-  document.getElementById('btnTrue').classList.toggle('on',mode==="true");
-  document.getElementById('btnLog').classList.toggle('on',mode==="log");
+  document.getElementById('hint').textContent=hintFor();
+  document.getElementById('scaleState').textContent = t<0.04?"\u2190 drag the scale \u2192" : t<0.55?"squishing\u2026" : "fully squished";
 }
-document.getElementById('btnTrue').addEventListener('click',()=>{mode="true";render();});
-document.getElementById('btnLog').addEventListener('click',()=>{mode="log";render();});
+document.getElementById('scale').addEventListener('input',function(e){t=+e.target.value/1000;render();});
 render();
 </script>
 </body>
